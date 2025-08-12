@@ -6,6 +6,12 @@ __pycache__/
 # C extensions
 *.so
 
+# .env
+.env
+
+# account data
+account.json
+
 # Distribution / packaging
 .Python
 build/
