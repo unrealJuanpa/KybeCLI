@@ -396,6 +396,70 @@ def interpreter(text: str) -> str:
     # Return all results joined by newlines
     return '\n'.join(results)
 
+def getFunctionDocs() -> str:
+    """
+    Retrieve documentation for all functions in agent_tools.py.
+    
+    Returns:
+        str: A formatted string containing the names and docstrings of all functions
+             in agent_tools.py, or an error message if the module cannot be imported.
+             
+    Example:
+        >>> print(getFunctionDocs())
+        Available Functions and Descriptions\n\n        Function: changeFile\n        Description: Modify a file based on a natural language description of changes...
+        \n        [More functions...]
+    """
+    import importlib.util
+    import inspect
+    from typing import Dict, List, Tuple
+    
+    try:
+        # Dynamically import agent_tools to get its functions
+        spec = importlib.util.spec_from_file_location("agent_tools", "agent_tools.py")
+        agent_tools = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(agent_tools)
+        
+        # Get all functions from agent_tools
+        functions = []
+        for name, obj in inspect.getmembers(agent_tools):
+            if inspect.isfunction(obj) and not name.startswith('_'):
+                doc = inspect.getdoc(obj) or "No documentation available"
+                # Get function signature
+                sig = inspect.signature(obj)
+                # Format parameters
+                params = []
+                for param in sig.parameters.values():
+                    param_str = str(param)
+                    if param.default != inspect.Parameter.empty:
+                        default = param.default
+                        if isinstance(default, str):
+                            default = f"'{default}'"
+                        param_str = param_str.replace(f"={param.default}", f"={default}")
+                    params.append(param_str)
+                
+                signature = f"{name}({', '.join(params)})"
+                functions.append((signature, doc))
+        
+        # Format the output
+        if not functions:
+            return "No functions found in agent_tools.py"
+            
+        result = ["Available Functions and Descriptions\n"]
+        for signature, doc in functions:
+            # Clean up docstring indentation
+            cleaned_doc = '\n'.join(line.strip() for line in doc.split('\n')).strip()
+            # Add to result
+            result.extend([
+                f"Function: {signature}",
+                f"Description: {cleaned_doc}\n"
+            ])
+        
+        return '\n'.join(result).strip()
+        
+    except Exception as e:
+        return f"Error retrieving function documentation: {str(e)}"
+
 if __name__ == "__main__":
     # Example usage
+    print(getFunctionDocs())
     checkChanges(".")
