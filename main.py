@@ -42,8 +42,31 @@ def save_account(data: Dict[str, Any]) -> None:
         json.dump(data, f, indent=2)
 
 def show_main_screen(provider: str, model: str, path: str) -> None:
-    """Display the main working screen"""
-    print(f"Working on {path} using {model} with {provider} as provider")
+    """
+    Display the main working screen and monitor for file changes.
+    
+    Args:
+        provider: The provider being used ('ollama' or '0x255')
+        model: The model being used
+        path: The project path to monitor for changes
+    """
+    from internal_tools import checkChanges
+    import time
+    
+    print(f"Working with {provider} provider, model: {model}, path: {path}")
+    print("Monitoring for file changes... (Press Ctrl+C to exit)")
+    
+    try:
+        while True:
+            # Check for file changes
+            checkChanges(path)
+            # Wait before next check (e.g., every 5 seconds)
+            time.sleep(5)
+    except KeyboardInterrupt:
+        print("\nStopping file monitoring...")
+    except Exception as e:
+        print(f"Error monitoring files: {e}")
+        raise
 
 class LoadingIndicator:
     def __init__(self, message: str = "Processing"):
