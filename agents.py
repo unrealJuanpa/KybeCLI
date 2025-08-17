@@ -85,7 +85,7 @@ class Agent:
 
 class ComposedAgent:
     def __init__(self, model: str, system_prompt: str, functions: List[Callable], 
-                 max_interactions: int = 10, ollama_base_url: str = "http://localhost:11434"):
+                 max_interactions: int = 32, ollama_base_url: str = "http://localhost:11434"):
         """
         Initialize the ComposedAgent with model, system prompt, and functions.
         
