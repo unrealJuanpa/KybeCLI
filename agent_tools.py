@@ -20,7 +20,7 @@ code_editor_agent = Agent(
     model="llama3"
 )
 
-def changeFile(file_path: str, change_description: str) -> str:
+def modifyFile(file_path: str, change_description: str) -> str:
     """
     Modify a file based on a natural language description of changes.
     
@@ -36,7 +36,7 @@ def changeFile(file_path: str, change_description: str) -> str:
         str: 'Done' if successful, or an error message if something went wrong
         
     Example:
-        >>> changeFile("src/utils.py", "Add error handling to the process_data function")
+        >>> modifyFile("src/utils.py", "Add error handling to the process_data function")
         'Done'
     """
     try:
