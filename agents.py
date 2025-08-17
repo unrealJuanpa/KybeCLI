@@ -113,6 +113,8 @@ class ComposedAgent:
         
         functions_list = "\n".join([f"- {name}" for name in self.functions.keys()])
         
+        # Build the system prompt with proper string formatting
+        function_docs_str = "\n\n".join(function_docs)
         return f"""You are an AI assistant that interacts with users through an intermediary system. 
 Your responses will be interpreted to detect and execute function calls.
 
@@ -122,7 +124,7 @@ AVAILABLE FUNCTIONS:
 {functions_list}
 
 FUNCTION DOCUMENTATION:
-{"\n\n".join(function_docs)}
+{function_docs_str}
 
 ANALYTICAL THINKING CYCLE (ITERATIVE):
 1. ANALYSIS: Evaluate the situation and identify what's needed
